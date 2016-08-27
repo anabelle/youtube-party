@@ -309,7 +309,7 @@ helloApp.filter('seconds_to_string', function() {
     var minutes = Math.floor((seconds/60)%60)
     var seconds =  Math.floor(seconds%60)
 
-    return (hours > 0 ? hours + ' hours. ' : '') +  minutes + ' minutes. ' + seconds + ' seconds.';
+    return (hours > 0 ? hours + ' horas. ' : '') +  minutes + ' minutos. ' + seconds + ' segundos.';
 	}
 });
 
@@ -327,7 +327,7 @@ $(document).ready(function(){
 	});
 
 	$('#collapseSearch').on('shown.bs.collapse', function(){
-		$('#search-expand').html('Hide');
+		$('#search-expand').html('Ocultar');
 	});
 
 	$('#collapseSearch').on('hidden.bs.collapse', function(){

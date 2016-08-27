@@ -1,7 +1,7 @@
 <!doctype html>
 <html ng-app="helloApp">
   <head>
-    <title>youtube party</title>
+    <title>PuenteParty</title>
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/custom.css">
 
@@ -20,68 +20,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   </head>
   <body ng-controller="PlaylistCtrl">
+    <header>
+      <h1>PuenteParty</h1>
+      <h3 ng-show='playlistSongInfo.length > 0'>
+        <em>Suena ahora:</em> {{playlistSongInfo[0].title}}
+      </h3>
+      <h3 ng-show='playlistSongInfo.length == 0'>
+        
+      </h3>
+      <span ng-show='!playerHere'>(No hay reproductores activos)</span>
+
+      <div class="buttons">
+        <button class="btn btn-primary" ng-click="removeSong(playlistSongInfo[0])" width='110px' id='deleteSongButton' ng-show='playlistSongInfo.length > 0'>X</button>
+        <button class="btn btn-primary" ng-click="skipSong()" width='110px' id='skipSongButton' ng-show='playlistSongInfo.length > 1'></button>
+      </div>
+    </header>
 
      <div class="container col-sm-12" id="mainContent">
 
       <div class="jumbotron" ng-show='!isController'>
-        <h1>Time for a youtube party!</h1>
-        <div ng-show='playlist.length > 0'>
-          <div id="player"></div>
+        <!-- <h1>Time for a youtube party!</h1> -->
+        <div id="showcase" ng-show='playlist.length > 0'>
+          <div class="pane video">
+            <div id="player"></div>
+          </div>
+          <div class="pane">
+            <h3>Para agregar canciones a la lista visita esta dirección:</h3>
+            <img src="http://api.qrserver.com/v1/create-qr-code/?data=http://party.debajodelpuente.com/client&size=220x220&margin=0" />
+            <small>http://party.debajodelpuente.com/client/</small>
+          </div>
         </div>
         <div ng-show='playlist.length == 0'>
-          <h2>Nothing to play... add some music at the bottom of the page to get started<h2>
-        </div>
-        <div class='panel panel-default' ng-show='address'>
-          <div class='panel-heading'>
-            <h3>
-              <a role="button" data-toggle="collapse" data-target="#qrCodesPanel">
-                Get your friends to scan the codes here to listen to the server or control it!
-              </a>
-            </h3>
-          </div>
-          <div id="qrCodesPanel" class='panel-body panel-collapse collapse in'>
-            <div class='container col-sm-6'>
-              <h3> use the code below to listen in.</h3>
-              <div class='well white-well'>
-                <img class="white-well" src='http://api.qrserver.com/v1/create-qr-code/?data={{address}}&size=220x220&margin=0' />
-              </div>
-            </div>
-            <div class='container col-sm-6'>
-              <h3> use the code below to control the music.</h3>
-              <div class='well white-well'>
-                <img class="white-well" src='http://api.qrserver.com/v1/create-qr-code/?data={{address}}client&size=220x220&margin=0' />
-              </div>
-            </div>
-            <h4>alternatively you can connect to <a href='http://{{address}}'>'http://{{address}}'</a> to listen in, or <a href='http://{{address}}client'>'http://{{address}}client'</a> to control it!</h4>
-          </div>
-        </div>
-      </div>
-
-      <div class="panel panel-primary">
-        <div class="panel-heading">
-          <div class="panel-title">
-            <h3 ng-show='playlistSongInfo.length > 0'>
-              Current video: {{playlistSongInfo[0].title}}
-            </h3>
-            <h3 ng-show='playlistSongInfo.length == 0'>
-              Nothing to play yet...
-            </h3>
-            <span ng-show='!playerHere'>(BTW, there is no current players!)</span>
-          </div>
-        </div>
-        <div class="panel-body">
-          <button class="btn btn-primary" ng-click="skipSong()" width='110px' id='skipSongButton' ng-show='playlistSongInfo.length > 1'>
-            Skip song
-          </button>
-          <button class="btn btn-primary" ng-click="pauseSong()" width='110px' id='pauseSongButton' ng-show='isController && playing && playlistSongInfo.length > 0 && playerHere'>
-            Pause song 
-          </button>
-          <button class="btn btn-primary" ng-click="playSong()" width='110px' id='playSongButton' ng-show='isController && !playing && playlistSongInfo.length > 0 && playerHere'>
-            Play song 
-          </button>
-          <button class="btn btn-primary" ng-click="removeSong(playlistSongInfo[0])" width='110px' id='deleteSongButton' ng-show='playlistSongInfo.length > 0'>
-            Remove song
-          </button>
+          <h2>No hay videos en la fila. Agrega alguno para empezar<h2>
         </div>
       </div>
 
@@ -89,56 +59,56 @@
         <div class='panel-heading'>
           <h3 class="panel-title">
             <a role="button" data-toggle="collapse" data-target="#currentPlaylistBody">
-              Current song queue
+              Lista de reproducción
             </a>
           </h3>
         </div>
-        <div id="currentPlaylistBody" class='panel-collapse collapse in' style="max-height: 500px;overflow-y:scroll;">
+        <div id="currentPlaylistBody" class='panel-collapse collapse in'>
           <div class="panel-body">
             <table class="table table-hover table-condensed" ng-show="playlistSongInfo.length > 1">
               <thead>
                 <tr>
-                  <th class='col-sm-7'>Video title</th>
-                  <th class='col-sm-2'>Length</th>
-                  <th class='col-sm-1'>Options</th>
+                  <th class='col-sm-7'>Título</th>
+                  <th class='col-sm-2'>Duración</th>
+                  <!-- <th class='col-sm-1'>Opciones</th> -->
                 </tr>
               </thead>
-              <tbody ui-sortable='sortableOptions' ng:model="playlistSongInfo">
-                <tr ng-repeat="song in playlistSongInfo" class='song' ng-show="$index != 0" style="cursor: move;">
-                  <td><img src="{{song.thumbnails.default.url}}" width='40' height='33'>{{song.title}}</td>
+              <tbody ng:model="playlistSongInfo"> <!-- ui-sortable='sortableOptions' -->
+                <tr ng-repeat="song in playlistSongInfo" class='song' ng-show="$index != 0"><!-- style="cursor: move;" -->
+                  <td><a class="btn dlt" role="button" ng-click="removeSong(song)">X</a><img src="{{song.thumbnails.default.url}}" width='120' class="thumb">{{song.title}}</td>
                   <td>{{song.duration | convert_time | seconds_to_string}}</td>
-                  <td>
+                  <!-- <td>
                     <div class="dropdown">
                       <button type="button" class="btn-small btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Options <span class="caret"></span>
+                        Opciones <span class="caret"></span>
                       </button>
                       <ul class="dropdown-menu" aria-labelledby="dLabel">
-                        <li><a role="button" ng-click="playNow(song)">play now</a></li>
-                        <li><a role="button" ng-click="bringToFront(song)">bring to front</a></li>
-                        <li><a role="button" ng-click="pushToBack(song)">push to back</a></li>
-                        <li><a role="button" ng-click="removeSong(song)">delete</a></li>
+                        <li><a role="button" ng-click="playNow(song)">reproducir ahora</a></li>
+                        <li><a role="button" ng-click="bringToFront(song)">de primera</a></li>
+                        <li><a role="button" ng-click="pushToBack(song)">de últimas</a></li>
+                        <li><a role="button" ng-click="removeSong(song)">eliminar</a></li>
                       </ul>
                     </div>
-                  </td>
+                  </td> -->
                 </tr>
               </tbody>
             </table>
-            <div ng-show="playlistSongInfo.length <= 1"><h4>Nothing queued!</h4></div>
-            <p>You can add more videos using the search bar below.</p>
+            <div ng-show="playlistSongInfo.length <= 1"><h4>Nada por reproducir!</h4></div>
+            <p ng-show='isController'><em>Puedes agregar más canciones usando el buscador abajo.</em></p>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="panel panel-default col-sm-12" id="search">
+    <div class="panel panel-default col-sm-12" id="search" ng-show='isController'>
       <div class="panel-heading col-sm-12">
         <form class='form-inline col-sm-12'>
           <span class='form-group col-sm-8'>
-            <input type="text" class="form-control" ng-model="queryStr" style='width:100%' placeholder="Search Youtube For Videos...">
+            <input type="text" class="form-control" ng-model="queryStr" style='width:100%' placeholder="Buscar videos...">
           </span>
           <span class='form-group col-sm-4'>
-            <button type="submit" class="btn btn-primary" ng-click="search(queryStr)">Search</button>
-            <button class="btn btn-primary" data-toggle="collapse" href="#collapseSearch" id='search-expand'>Expand</button>
+            <button type="submit" class="btn btn-primary" ng-click="search(queryStr)">Buscar</button>
+            <button class="btn btn-primary" data-toggle="collapse" href="#collapseSearch" id='search-expand'>Expandir</button>
           </span>
         </form>
        </div>
@@ -147,22 +117,32 @@
           <table class="table table-hover table-condensed col-sm-12">
               <thead>
                 <tr>
-                  <th class='col-sm-7'>Video title</th>
-                  <th class='col-sm-2'>Channel</th>
-                  <th class='col-sm-1'>Add to queue</th>
+                  <th class='col-sm-7'>Título</th>
+                  <th class='col-sm-2'>Canal</th>
+                  <th class='col-sm-1'>Agregar a la lista</th>
                 </tr>
               <thead>
               <tbody>
                 <tr ng-repeat="song in searchResults">
                   <td><img src="{{song.thumbnails.default.url}}" width='40' height='33'>{{song.title}}</td>
                   <td>{{song.channelTitle}}</td>
-                  <td><input type="button" class="btn-small btn-primary" value="Add to queue" ng-click="addSong(song.id)"/></td>
+                  <td><input type="button" class="btn-small btn-primary" value="Agregar a la lista" ng-click="addSong(song.id)"/></td>
                 </tr>
               <tbody>
             </table>
-            <a ng-click="loadMoreResults()" ng-show='searchResults.length > 0'>Load More Results...</a>
+            <a ng-click="loadMoreResults()" ng-show='searchResults.length > 0'>Cargar más resultados...</a>
         </div>
       </div>
     </div>
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-79846049-8', 'auto');
+    ga('send', 'pageview');
+
+    </script>
   </body>
 </html>

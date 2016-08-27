@@ -17,9 +17,47 @@ iframe {
   text-align: center;
 }
 
-.panel-heading button{
-  width:100px;
+.panel-heading button {
+  width:100px; 
   max-width:100px;
+}
+
+.buttons {
+  display: none;
+  float: right;
+  padding: 5px;
+}
+
+.dlt {
+  display: none;
+}
+
+.admin .dlt {
+  display: inline-block;
+}
+
+.admin .buttons {
+  display: block;
+}
+
+.buttons button.btn {
+    padding: 3px 10px;
+}
+
+.thumb {
+  display: inline-block;
+  margin: 0 10px 0 0;
+  vertical-align: middle;
+}
+
+.btn-primary {
+  background-color: #FF0000;
+  border: none;
+}
+
+.btn-primary:hover, .btn-primary:focus, .btn-primary.focus, .btn-primary:active, .btn-primary.active {
+  background-color: #FFF;
+  color: #FF0000;
 }
 
 table > thead{
@@ -95,4 +133,57 @@ table > tbody > tr {
   width: 100px;
   height: 50px;
   border: 1px solid #333;
+}
+
+header {
+  background-color: #000;
+}
+
+header h1 {
+  background-color: #FF0000;
+  display: inline-block;
+  color: #fff;
+  margin: 0;
+  padding: 0 20px 0 20px;
+  line-height: 40px;
+  font-size: 20px;
+  vertical-align: middle;
+}
+
+header h3 {
+  margin: 0;
+  padding: 0 20px;
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 18px;
+  line-height: 40px;
+}
+
+.pane h3 {
+  margin: 0 0 20px;
+  padding: 0;
+}
+
+.pane img {
+  border: 10px solid #fff;
+}
+
+.dropdown {
+  display: none;
+}
+
+@media screen and ( min-width: 720px ){
+  #showcase .pane.video {
+    display: inline-block;
+    text-align: center;
+    vertical-align: top;
+    width: 70%;
+  }
+
+  #showcase .pane {
+    display: inline-block;
+    text-align: center;
+    vertical-align: top;
+    width: 25%;
+  }
 }
