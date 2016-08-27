@@ -244,7 +244,7 @@ helloApp.controller("PlaylistCtrl", function($scope, $http) {
 					$scope.cachedResponces[videoId] = data.items[0].snippet;
 					$scope.cachedResponces[videoId].duration = data.items[0].contentDetails.duration;
 					$scope.cachedResponces[videoId].id = videoId;
-				  $scope.cachedResponces[videoId].index = index;
+				    $scope.cachedResponces[videoId].index = index;
 					$scope.playlistSongInfo[$scope.cachedResponces[videoId].index] = $scope.cachedResponces[videoId];
       	});
 			}
@@ -331,6 +331,6 @@ $(document).ready(function(){
 	});
 
 	$('#collapseSearch').on('hidden.bs.collapse', function(){
-		$('#search-expand').html('Expand');
+		$('#search-expand').html('Expandir');
 	});
 });

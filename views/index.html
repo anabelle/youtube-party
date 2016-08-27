@@ -75,7 +75,7 @@
               </thead>
               <tbody ng:model="playlistSongInfo"> <!-- ui-sortable='sortableOptions' -->
                 <tr ng-repeat="song in playlistSongInfo" class='song' ng-show="$index != 0"><!-- style="cursor: move;" -->
-                  <td><a class="btn dlt" role="button" ng-click="removeSong(song)">X</a><img src="{{song.thumbnails.default.url}}" width='120' class="thumb">{{song.title}}</td>
+                  <td><a class="btn dlt" role="button" ng-click="removeSong(song)">X</a><img src="{{song.thumbnails.default.url}}" width='60' class="thumb">{{song.title}}</td>
                   <td>{{song.duration | convert_time | seconds_to_string}}</td>
                   <!-- <td>
                     <div class="dropdown">
