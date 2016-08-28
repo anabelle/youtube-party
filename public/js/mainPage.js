@@ -25,7 +25,6 @@ function onPlayerReady(event) {
   justJoined = true;
   var oldTime = 0;
 
-
   setTimeout(function(){
 		justJoined = false;
   }, 2000);
@@ -57,7 +56,13 @@ function onPlayerStateChange(event) {
 
 var helloApp = angular.module("helloApp", ['ui']);
 
-helloApp.controller("PlaylistCtrl", function($scope, $http) {
+helloApp.config(['$locationProvider', function($locationProvider) {
+    $locationProvider.html5Mode(true);
+}]);
+
+helloApp.controller("PlaylistCtrl", function($scope, $http, $location) {
+	console.log( $location.search() );
+
 	$scope.playlist = [];
 	$scope.playlistSongInfo = [];
 	$scope.searchResults = [];
@@ -69,26 +74,27 @@ helloApp.controller("PlaylistCtrl", function($scope, $http) {
 	$scope.address = '';
 	$scope.isController = isController;
 
+  	if( !isController && $location.search().action != 'play' ){ window.location.href = '/client' };
+  	
 	var oldQueryStr = '';
 	var nextPageToken = '';
 	var ignoreEventUpdate = false;
 
-
   if(isController){ 
   	socket.emit('controller joined');
-	}
-  else{ 
-	  $scope.playerHere = true;
-	  socket.on('reconnect', function(){
-	  	socket.emit('player still here');
-	  	justJoined = true;
+  }else{ 
+		  $scope.playerHere = true;
+		  socket.on('reconnect', function(){
+		  	socket.emit('player still here');
+		  	justJoined = true;
 
-  	  setTimeout(function(){
-		    justJoined = false;
-      }, 2000);
-	  });
-  	setInterval(function(){socket.emit('player still here');}, 10000); 
+	  	  setTimeout(function(){
+			    justJoined = false;
+	      }, 2000);
+		  });
+	  	setInterval(function(){socket.emit('player still here');}, 10000); 		
 	}
+
 
 	$scope.skipSong = function(){
 		socket.emit('pop top of queue', $scope.playlistSongInfo[0].id);
@@ -168,7 +174,6 @@ helloApp.controller("PlaylistCtrl", function($scope, $http) {
 
 	socket.on('player state change', function(event){
 		$scope.playerHere = true;
-		
 		if(!ignoreEventUpdate){
 			if(player){
 				if(event.target.B.currentTime > player.getCurrentTime()+2 ||
@@ -191,12 +196,13 @@ helloApp.controller("PlaylistCtrl", function($scope, $http) {
 	});
 
 	socket.on('new player added', function(){
+
 		$scope.playerHere = true;
 		ignoreEventUpdate = true;
 
 		setTimeout(function(){
 			ignoreEventUpdate = false;
-
+		
 			if(!justJoined && player){
 				var evt = {
   				data: player.getPlayerState(),
